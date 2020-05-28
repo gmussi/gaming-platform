@@ -11,21 +11,12 @@ import java.util.logging.Logger;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
-@Testcontainers
 @QuarkusTest
-public class AuthResourceTest {
+public class AuthResourceTest extends ContainerMongoTest {
     public static final Logger LOGGER = Logger.getLogger(AuthResourceTest.class.getName());
 
-    static GenericContainer mongodb = new GenericContainer<>("mongo:4.2").withExposedPorts(27017);
-    static {
-        mongodb.start();
-        System.setProperty("quarkus.mongodb.connection-string",
-                "mongodb://" + mongodb.getContainerIpAddress() + ":" + mongodb.getFirstMappedPort());
-    }
     static String username = UUID.randomUUID().toString();
     static String password = UUID.randomUUID().toString();
-
-    String token;
 
     @Test
     public void testUsernameExists() {
@@ -78,7 +69,7 @@ public class AuthResourceTest {
 
     @Test
     public void testGetPlayer() {
-        // accessing an authenticated resource must fail
+        // accessing an authenticated resource without token must fail
         given()
             .when().get("auth/me")
             .then()

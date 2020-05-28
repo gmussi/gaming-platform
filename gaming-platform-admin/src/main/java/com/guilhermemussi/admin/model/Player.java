@@ -7,7 +7,7 @@ import org.bson.codecs.pojo.annotations.BsonId;
 @MongoEntity(collection = "players")
 public class Player extends PanacheMongoEntity {
     @BsonId
-    public String name;
+    public String username;
 
     public Boolean connected;
     public Boolean searching;
@@ -22,7 +22,7 @@ public class Player extends PanacheMongoEntity {
     public synchronized static Player use(final String name) {
         return Player.<Player>findByIdOptional(name).orElseGet(() -> {
             Player player = new Player();
-            player.name = name;
+            player.username = name;
             player.defeats = 0;
             player.victories = 0;
             player.persist();
