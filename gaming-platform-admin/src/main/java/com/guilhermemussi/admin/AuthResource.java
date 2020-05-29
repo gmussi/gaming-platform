@@ -30,8 +30,8 @@ public class AuthResource {
 
     @GET
     @Path("/available/{username}")
-    public Boolean usernameExists(@PathParam("username") String username, @Context SecurityContext context) {
-        return Player.findByIdOptional(username).isPresent();
+    public Boolean usernameExists(@PathParam("username") String username) {
+        return PlayerCredential.findByIdOptional(username).isPresent();
     }
 
     @GET
