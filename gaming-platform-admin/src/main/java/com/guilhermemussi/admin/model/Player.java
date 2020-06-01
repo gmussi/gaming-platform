@@ -19,10 +19,10 @@ public class Player extends PanacheMongoEntity {
 
     }
 
-    public synchronized static Player use(final String name) {
-        return Player.<Player>findByIdOptional(name).orElseGet(() -> {
+    public synchronized static Player use(final String username) {
+        return Player.<Player>findByIdOptional(username).orElseGet(() -> {
             Player player = new Player();
-            player.username = name;
+            player.username = username;
             player.defeats = 0;
             player.victories = 0;
             player.persist();

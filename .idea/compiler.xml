@@ -6,8 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="gaming-platform-webadmin" />
+        <module name="gaming-platform-statistics" />
         <module name="gaming-platform-admin" />
+        <module name="gaming-platform-webadmin" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="9">

@@ -82,15 +82,26 @@ const Player = Backbone.Model.extend({
     initConnection(ticket) {
         this.set("status", CONNECTING);
         let name = this.get("name");
-        console.log("Initializing " + name);
+
+        let ws = new WebSocket(`ws://localhost:8080/player/${name}/${ticket}`);
+        ws.onopen = (event) => this.onConnected(event);
+        ws.onclose = (event) => this.onDisconnected(event);
+        ws.onerror = (event) => this.onDisconnected(event);
+        ws.onmessage = (event) => this.onPlayerEvent(event);
+        this.set("ws", ws);
+    },
+    onConnected(event) {
+
+    },
+    onDisconnected(event) {
+
+    },
+    onPlayerEvent(event) {
+
     }
 });
 
-const InteractivePlayer = Player.extend({
-
-});
-
-const TicTacToePlayer = InteractivePlayer.extend({
+const TicTacToePlayer = Player.extend({
 
 });
 

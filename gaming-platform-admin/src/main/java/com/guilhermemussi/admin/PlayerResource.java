@@ -3,9 +3,12 @@ package com.guilhermemussi.admin;
 import com.guilhermemussi.admin.config.TokenUtils;
 import com.guilhermemussi.admin.model.Player;
 import com.guilhermemussi.admin.model.SessionTicket;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import javax.websocket.server.PathParam;
@@ -27,6 +30,10 @@ public class PlayerResource {
 
     static final ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
 
+    @Inject
+    @Channel("player-connected-out")
+    Emitter<String> playerConnected;
+
     @OnOpen
     public void onOpen(final Session session, @PathParam("username") String username, @PathParam("ticketId") String ticketId) throws IOException {
         LOGGER.info("open " + session.getUserPrincipal());
@@ -47,11 +54,12 @@ public class PlayerResource {
         LOGGER.info("Player " + ticket.username + " connected");
 
         // set state of player to connected
-        Player player = Player.findById(ticket.username);
+        Player player = Player.use(ticket.username);
         player.connected = true;
         player.update();
 
         // broadcast that player is connected
+        playerConnected.send(username);
     }
 
     @OnClose
@@ -67,6 +75,7 @@ public class PlayerResource {
         player.update();
 
         // broadcast that player disconnection
+        // playerDisconnected.send(username);
     }
 
     @OnError
@@ -79,6 +88,7 @@ public class PlayerResource {
 
     @OnMessage
     public void onMessage(String message, @PathParam("username") String username) {
-
+        LOGGER.info("Message from " + username + ": " + message);
     }
+
 }
