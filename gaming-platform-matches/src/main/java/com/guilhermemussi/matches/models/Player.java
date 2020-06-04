@@ -1,4 +1,4 @@
-package com.guilhermemussi.admin.model;
+package com.guilhermemussi.matches.models;
 
 import io.quarkus.mongodb.panache.MongoEntity;
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
@@ -11,6 +11,7 @@ public class Player extends PanacheMongoEntity {
 
     public Boolean connected;
     public Boolean searching;
+    public GameType gameType;
 
     public Integer defeats;
     public Integer victories;

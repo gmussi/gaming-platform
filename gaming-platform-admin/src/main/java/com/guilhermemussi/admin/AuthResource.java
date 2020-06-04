@@ -1,8 +1,7 @@
 package com.guilhermemussi.admin;
 
-import com.guilhermemussi.admin.config.TokenUtils;
 import com.guilhermemussi.admin.model.PlayerCredential;
-import com.guilhermemussi.admin.model.Player;
+import com.guilhermemussi.admin.config.TokenUtils;
 import org.eclipse.microprofile.jwt.Claims;
 import org.jose4j.jwt.JwtClaims;
 
@@ -18,7 +17,6 @@ import java.security.MessageDigest;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 @Path("auth")

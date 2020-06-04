@@ -8,6 +8,8 @@
         <option value="$PROJECT_DIR$/gaming-platform-admin/pom.xml" />
         <option value="$PROJECT_DIR$/gaming-platform-webadmin/pom.xml" />
         <option value="$PROJECT_DIR$/gaming-platform-statistics/pom.xml" />
+        <option value="$PROJECT_DIR$/gaming-platform-gameplay/pom.xml" />
+        <option value="$PROJECT_DIR$/gaming-platform-matches/pom.xml" />
       </list>
     </option>
   </component>

@@ -1,4 +1,4 @@
-package com.guilhermemussi;
+package com.guilhermemussi.gameplay;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

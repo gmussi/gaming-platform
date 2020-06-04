@@ -1,29 +1,28 @@
-package com.guilhermemussi.admin;
+package com.guilhermemussi.gameplay;
 
-import com.guilhermemussi.admin.config.TokenUtils;
-import com.guilhermemussi.admin.model.Player;
-import com.guilhermemussi.admin.model.SessionTicket;
+import com.guilhermemussi.gameplay.config.JsonTextDecoder;
+import com.guilhermemussi.gameplay.models.Player;
+import com.guilhermemussi.gameplay.models.SessionTicket;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
+import org.eclipse.microprofile.reactive.messaging.Incoming;
 
-import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import javax.websocket.server.PathParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.SecurityContext;
 import java.io.IOException;
-import java.util.Optional;
-import java.util.Vector;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static javax.websocket.CloseReason.CloseCodes.VIOLATED_POLICY;
 
-@ServerEndpoint("/player/{username}/{ticketId}")
+@ServerEndpoint(value = "/player/{username}/{ticketId}", decoders = JsonTextDecoder.class)
 @ApplicationScoped
 public class PlayerResource {
     Logger LOGGER = Logger.getLogger(PlayerResource.class.getName());
@@ -33,6 +32,14 @@ public class PlayerResource {
     @Inject
     @Channel("player-connected-out")
     Emitter<String> playerConnected;
+
+    @Inject
+    @Channel("player-disconnected-out")
+    Emitter<String> playerDisconnected;
+
+    @Inject
+    @Channel("find-match-out")
+    Emitter<JsonObject> findMatch;
 
     @OnOpen
     public void onOpen(final Session session, @PathParam("username") String username, @PathParam("ticketId") String ticketId) throws IOException {
@@ -75,7 +82,7 @@ public class PlayerResource {
         player.update();
 
         // broadcast that player disconnection
-        // playerDisconnected.send(username);
+        playerDisconnected.send(username);
     }
 
     @OnError
@@ -87,8 +94,28 @@ public class PlayerResource {
     }
 
     @OnMessage
-    public void onMessage(String message, @PathParam("username") String username) {
-        LOGGER.info("Message from " + username + ": " + message);
+    public void onMessage(JsonObject json, @PathParam("username") String username) {
+        LOGGER.info("Message from " + username + ": " + json);
+
+        switch (json.getString("action")) {
+            case "FIND_MATCH":
+                findMatch.send(Json.createObjectBuilder()
+                        .add("username", username)
+                        .add("gameType", json.getString("gameType"))
+                        .build());
+                break;
+            default:
+                LOGGER.warning("Action not known: " + json.getString("action"));
+        }
     }
 
+    @Incoming("player-events-in")
+    public void onPlayerEvent(JsonObject json) {
+        LOGGER.info("Player event received: " + json.toString());
+        String username = Objects.requireNonNull(json.getString("to"));
+        if (sessions.containsKey(username)) {
+            LOGGER.info("Publishing event to " + username);
+            sessions.get(username).getAsyncRemote().sendObject(json.toString());
+        }
+    }
 }

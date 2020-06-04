@@ -1,4 +1,4 @@
-package com.guilhermemussi.service;
+package com.guilhermemussi.gameplay.service;
 
 import io.smallrye.reactive.messaging.annotations.Merge;
 import org.eclipse.microprofile.reactive.messaging.Incoming;

@@ -4,8 +4,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.guilhermemussi</groupId>
-    <artifactId>gaming-platform-statistics</artifactId>
+    <artifactId>gaming-platform-gameplay</artifactId>
     <version>1.0-SNAPSHOT</version>
+
     <parent>
         <groupId>com.guilhermemussi</groupId>
         <artifactId>gaming-platform</artifactId>
@@ -15,7 +16,19 @@
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-mongodb-panache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-undertow-websockets</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
             <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-jwt</artifactId>
         </dependency>
     </dependencies>
 </project>

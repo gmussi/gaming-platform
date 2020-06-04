@@ -1,9 +1,7 @@
-package com.guilhermemussi.admin;
+package com.guilhermemussi.gameplay;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.UUID;
 import java.util.logging.Logger;

@@ -27,7 +27,7 @@ const Player = Backbone.Model.extend({
         // check if account exists
         let name = this.get("name");
         let that = this;
-        jQuery.get(`http://localhost:8080/auth/available/${name}`)
+        jQuery.get(`${SERVER.ADMIN}/auth/available/${name}`)
             .done((exists) => {
                 console.log(exists, exists == "true")
                 if (exists == "true") {
@@ -44,7 +44,7 @@ const Player = Backbone.Model.extend({
     login() {
         let that = this;
         this.set("status", AUTHENTICATING);
-        jQuery.post("http://localhost:8080/auth/login", {
+        jQuery.post(`${SERVER.ADMIN}/auth/login`, {
             "username": this.get("name"),
             "password": this.get("name")
         }).done((token) => {
@@ -58,7 +58,7 @@ const Player = Backbone.Model.extend({
     register() {
         let that = this;
         this.set("status", REGISTERING);
-        jQuery.post(`http://localhost:8080/auth/register`, {
+        jQuery.post(`${SERVER.ADMIN}/auth/register`, {
             "username": this.get("name"),
             "password": this.get("name")
         }).done((token) => {
@@ -73,7 +73,7 @@ const Player = Backbone.Model.extend({
         let that = this;
         this.set("status", GETTING_TICKET);
         jQuery.ajax({
-            url: "http://localhost:8080/ticket",
+            url: `${SERVER.ADMIN}/ticket`,
             headers: {
                 "Authorization": "Bearer " + this.get("token")
             }
@@ -83,7 +83,7 @@ const Player = Backbone.Model.extend({
         this.set("status", CONNECTING);
         let name = this.get("name");
 
-        let ws = new WebSocket(`ws://localhost:8080/player/${name}/${ticket}`);
+        let ws = new WebSocket(`${SERVER.GAMEPLAY}/player/${name}/${ticket}`);
         ws.onopen = (event) => this.onConnected(event);
         ws.onclose = (event) => this.onDisconnected(event);
         ws.onerror = (event) => this.onDisconnected(event);
@@ -91,26 +91,29 @@ const Player = Backbone.Model.extend({
         this.set("ws", ws);
     },
     onConnected(event) {
-
+        this.set("status", MATCHMAKING);
+        this.get("ws").send(JSON.stringify({
+            "action": "FIND_MATCH",
+            "gameType": this.get("gameType")
+        }));
     },
     onDisconnected(event) {
 
     },
     onPlayerEvent(event) {
-
+        console.log(event.data);
     }
 });
 
 const TicTacToePlayer = Player.extend({
-
+    "defaults" : {
+        "gameType": "TICTACTOE"
+    }
 });
 
 class Players extends Backbone.Collection {
-    preinitialize() {
-        this.on("add", this.addPlayer);
-    }
-
     addPlayer(player, view) {
+        this.add(player);
         $("#players").append(view.$el);
         view.render();
         player.automate();

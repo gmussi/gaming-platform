@@ -24,6 +24,10 @@
 
     <modules>
         <module>gaming-platform-admin</module>
+        <module>gaming-platform-gameplay</module>
+        <module>gaming-platform-matches</module>
+        <module>gaming-platform-statistics</module>
+        <module>gaming-platform-webadmin</module>
     </modules>
 
     <dependencyManagement>

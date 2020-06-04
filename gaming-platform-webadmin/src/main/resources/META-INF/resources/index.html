@@ -124,10 +124,10 @@
         -->
         <h2>Players
             <select id="gameType">
-                <option value="tictactoe">Tic Tac Toe</option>
-                <option value="matchfour">Match Four</option>
-                <option value="checkers">Checkers</option>
-                <option value="chess">Chess</option>
+                <option value="TICTACTOE">Tic Tac Toe</option>
+                <option value="MATCH_FOUR">Match Four</option>
+                <option value="CHECKERS">Checkers</option>
+                <option value="CHESS">Chess</option>
             </select>
             <button type="button" class="btn btn-secondary" id="add-player">Add player</button>
         </h2>
@@ -136,6 +136,11 @@
     </div>
 </body>
 <script>
+    const SERVER = {
+        "ADMIN": "http://localhost:8080",
+        "STATISTICS": "http://localhost:8081",
+        "GAMEPLAY": "ws://localhost:8082"
+    };
     const names = ["Guilherme-", "Marcelo-", "Fernando-", "Matheus-", "Luciano-", "Eduardo-", "Svitlana-", "Daniel-", "Marco-", "Pedro-", "Paulo-"]
 
     let gmussi = new TicTacToePlayer({"name": "gmussi"});
@@ -145,7 +150,7 @@
         let gameType = $("#gameType").val();
 
         switch (gameType) {
-            case "tictactoe":
+            case "TICTACTOE":
                 let player = new TicTacToePlayer({
                     "name": names[Math.floor(Math.random() * names.length)] + (Math.floor(Math.random() * 1000))
                 });

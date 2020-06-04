@@ -1,4 +1,4 @@
-package com.guilhermemussi.admin;
+package com.guilhermemussi.gameplay;
 
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;

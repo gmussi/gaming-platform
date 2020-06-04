@@ -1,4 +1,4 @@
-package com.guilhermemussi.admin;
+package com.guilhermemussi.gameplay;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
