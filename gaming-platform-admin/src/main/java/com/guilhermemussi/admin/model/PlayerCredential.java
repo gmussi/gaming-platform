@@ -1,7 +1,7 @@
 package com.guilhermemussi.admin.model;
 
 import io.quarkus.mongodb.panache.MongoEntity;
-import io.quarkus.mongodb.panache.PanacheMongoEntity;
+import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.codecs.pojo.annotations.BsonId;
 
 import java.nio.charset.StandardCharsets;
@@ -9,7 +9,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @MongoEntity(collection = "credentials")
-public class PlayerCredential extends PanacheMongoEntity {
+public class PlayerCredential extends PanacheMongoEntityBase {
     @BsonId
     public String username;
     public String password;

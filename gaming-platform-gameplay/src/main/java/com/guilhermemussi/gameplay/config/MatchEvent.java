@@ -1,7 +1,7 @@
-package com.guilhermemussi.matches.config;
+package com.guilhermemussi.gameplay.config;
 
-import com.guilhermemussi.matches.models.Match;
-import com.guilhermemussi.matches.models.PlayerEvents;
+import com.guilhermemussi.gameplay.models.Match;
+import com.guilhermemussi.gameplay.models.PlayerEvents;
 
 public class MatchEvent {
     public Match match;

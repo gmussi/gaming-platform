@@ -1,14 +1,14 @@
-package com.guilhermemussi.matches.models;
+package com.guilhermemussi.gameplay.models;
 
 import io.quarkus.mongodb.panache.MongoEntity;
-import io.quarkus.mongodb.panache.PanacheMongoEntity;
+import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.codecs.pojo.annotations.BsonId;
 
 import java.util.List;
 import java.util.Random;
 
 @MongoEntity(collection = "matches")
-public class Match extends PanacheMongoEntity {
+public class Match extends PanacheMongoEntityBase {
     public static final Random random = new Random(234523542345L);
 
     @BsonId

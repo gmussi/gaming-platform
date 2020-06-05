@@ -1,9 +1,9 @@
-package com.guilhermemussi.matches.service;
+package com.guilhermemussi.gameplay.service;
 
-import com.guilhermemussi.matches.config.MatchEvent;
-import com.guilhermemussi.matches.models.GameType;
-import com.guilhermemussi.matches.models.Match;
-import com.guilhermemussi.matches.models.PlayerEvents;
+import com.guilhermemussi.gameplay.config.MatchEvent;
+import com.guilhermemussi.gameplay.models.GameType;
+import com.guilhermemussi.gameplay.models.Match;
+import com.guilhermemussi.gameplay.models.PlayerEvents;
 import io.smallrye.reactive.messaging.annotations.Merge;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
@@ -59,7 +59,7 @@ public class MatchService {
         }
     }
 
-    @Incoming("player-disconnected-in")
+    @Incoming("player-disconnected-in-matches")
     @Merge(Merge.Mode.MERGE)
     public void onPlayerDisconnected(String username) {
         List<Match> matches = Match.find("{'endType': null, 'players': ?1}", username).list();

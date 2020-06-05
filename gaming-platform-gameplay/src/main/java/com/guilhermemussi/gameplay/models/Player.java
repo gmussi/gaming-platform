@@ -1,11 +1,11 @@
 package com.guilhermemussi.gameplay.models;
 
 import io.quarkus.mongodb.panache.MongoEntity;
-import io.quarkus.mongodb.panache.PanacheMongoEntity;
+import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.codecs.pojo.annotations.BsonId;
 
 @MongoEntity(collection = "players")
-public class Player extends PanacheMongoEntity {
+public class Player extends PanacheMongoEntityBase {
     @BsonId
     public String username;
 

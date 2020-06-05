@@ -1,4 +1,4 @@
-package com.guilhermemussi.matches.models;
+package com.guilhermemussi.gameplay.models;
 
 import io.quarkus.mongodb.panache.MongoEntity;
 
