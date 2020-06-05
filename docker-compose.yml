@@ -1,0 +1,42 @@
+version: '3.2'
+
+services:
+  zookeeper:
+    image: zookeeper:3.4.12
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: gmussi/kafka-arm64:latest
+    deploy:
+      mode: global
+    depends_on:
+      - zookeeper
+    ports:
+      - target: 9094
+        published: 9094
+        protocol: tcp
+        mode: host
+    environment:
+      HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9094
+      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+
+  mongodb-express:
+    image: mongo-express:latest
+    depends_on:
+      - mongodb
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb

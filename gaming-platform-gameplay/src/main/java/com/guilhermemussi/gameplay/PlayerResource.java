@@ -3,6 +3,7 @@ package com.guilhermemussi.gameplay;
 import com.guilhermemussi.gameplay.config.JsonTextDecoder;
 import com.guilhermemussi.gameplay.models.Player;
 import com.guilhermemussi.gameplay.models.SessionTicket;
+import io.smallrye.reactive.messaging.annotations.Merge;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
@@ -12,8 +13,8 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.websocket.*;
-import javax.websocket.server.ServerEndpoint;
 import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,6 +41,10 @@ public class PlayerResource {
     @Inject
     @Channel("find-match-out")
     Emitter<JsonObject> findMatch;
+
+    @Inject
+    @Channel("player-move-out")
+    Emitter<JsonObject> playerMove;
 
     @OnOpen
     public void onOpen(final Session session, @PathParam("username") String username, @PathParam("ticketId") String ticketId) throws IOException {
@@ -104,12 +109,20 @@ public class PlayerResource {
                         .add("gameType", json.getString("gameType"))
                         .build());
                 break;
+            case "PLAY":
+                playerMove.send(Json.createObjectBuilder()
+                        .add("username", username)
+                        .add("matchId", json.getString("matchId"))
+                        .add("move", json.get("move"))
+                        .build());
+                break;
             default:
                 LOGGER.warning("Action not known: " + json.getString("action"));
         }
     }
 
     @Incoming("player-events-in")
+    @Merge(Merge.Mode.MERGE)
     public void onPlayerEvent(JsonObject json) {
         LOGGER.info("Player event received: " + json.toString());
         String username = Objects.requireNonNull(json.getString("to"));

@@ -25,7 +25,7 @@ public class MatchmakingService {
     @Incoming("find-match-in")
     public synchronized void findMatch(JsonObject json) {
         // validate input
-        String username = Objects.requireNonNull(json.getString("username"));
+        java.lang.String username = Objects.requireNonNull(json.getString("username"));
         GameType gameType = GameType.valueOf(Objects.requireNonNull(json.getString("gameType")));
 
         LOGGER.info("Searching " + gameType + " match for " + username);
@@ -51,6 +51,7 @@ public class MatchmakingService {
                         .build())
                 .build());
         } else { // else, sets this player to wait
+            LOGGER.info("Player " + username + " will wait for others");
             Player player = Player.use(username);
             player.searching = true;
             player.gameType = gameType;
