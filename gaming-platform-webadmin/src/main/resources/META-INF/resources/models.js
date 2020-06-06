@@ -30,7 +30,6 @@ const Player = Backbone.Model.extend({
         let that = this;
         jQuery.get(`${SERVER.ADMIN}/auth/available/${name}`)
             .done((exists) => {
-                console.log(exists, exists == "true")
                 if (exists == "true") {
                     that.login();
                 } else {
@@ -39,7 +38,6 @@ const Player = Backbone.Model.extend({
             })
             .fail((event) => {
                 that.set("status", FAILURE);
-                console.log(that, event);
             });
     },
     login() {
@@ -53,7 +51,6 @@ const Player = Backbone.Model.extend({
             that.getTicket();
         }).fail((event) => {
             that.set("status", FAILURE);
-            console.log(that, event);
         });
     },
     register() {
@@ -67,11 +64,9 @@ const Player = Backbone.Model.extend({
             that.getTicket();
         }).fail((event) => {
             that.set("status", FAILURE);
-            console.log(that, event);
         });
     },
     disconnect() {
-        console.log("Disconnecting myself: " + this.get("name"), this.get("ws"))
         this.get("ws").close();
     },
     getTicket() {
@@ -103,7 +98,6 @@ const Player = Backbone.Model.extend({
         }));
     },
     onDisconnected(event) {
-        console.log(this.get("name") + " disconnected.");
         this.set({
             "opponent": null,
             "status": DISCONNECTED,
@@ -119,6 +113,9 @@ const Player = Backbone.Model.extend({
             case "END_MATCH":
                 this.endMatch(event);
                 break;
+            case "PLAY":
+                this.onPlayEvent(event.match);
+                break;
             default:
                 console.log("Unknown event type " , event, this);
                 this.set("status", FAILURE);
@@ -132,6 +129,9 @@ const Player = Backbone.Model.extend({
     },
     onMatchEnd() {
 
+    },
+    onPlayEvent(event) {
+        // to be overridden
     }
 });
 
@@ -166,17 +166,21 @@ const TicTacToePlayer = Player.extend({
         setTimeout(() => that.onMatchEnd(), 1000);
     },
     play(pos) {
-        console.log("Sending MatchEvent to server ", pos, this);
-
         this.get("ws").send(JSON.stringify({
             "matchId": this.get("matchId"),
             "gameType": "TICTACTOE",
             "action": "PLAY",
             "move": {
-                "pos": pos
+                "pos": parseInt(pos)
             }
         }));
     },
+    onPlayEvent(event) {
+        this.set({
+            "pos": event.pos,
+            "isMyTurn": event.currentTurnPlayer == this.get("name")
+        });
+    }
 });
 
 class Players extends Backbone.Collection {

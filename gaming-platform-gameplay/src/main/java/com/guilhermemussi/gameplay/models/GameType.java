@@ -20,8 +20,13 @@ public enum GameType {
         }
 
         @Override
-        public boolean validateInput(String player, JsonObject json) {
-            return TicTacToeMatch.validateInput(player, json);
+        public boolean validateInput(String player, Match match, JsonObject move) {
+            return TicTacToeMatch.validateInput(player, match, move);
+        }
+
+        @Override
+        public int applyMove(String username, Match match, JsonObject move) {
+            return TicTacToeMatch.applyMove(username, match, move);
         }
     },
     CHECKERS {
@@ -31,9 +36,12 @@ public enum GameType {
         }
 
         @Override
-        public boolean validateInput(String player, JsonObject json) {
+        public boolean validateInput(String player, Match match, JsonObject mov) {
             return false;
         }
+
+        @Override
+        public int applyMove(String username, Match match, JsonObject move) { return 0; }
     },
     CHESS {
         @Override
@@ -42,9 +50,12 @@ public enum GameType {
         }
 
         @Override
-        public boolean validateInput(String player, JsonObject json) {
+        public boolean validateInput(String player, Match match, JsonObject mov) {
             return false;
         }
+
+        @Override
+        public int applyMove(String username, Match match, JsonObject move) { return 0; }
     },
     MATCH_FOUR {
         @Override
@@ -53,10 +64,14 @@ public enum GameType {
         }
 
         @Override
-        public boolean validateInput(String player, JsonObject json) {
+        public boolean validateInput(String player, Match match, JsonObject mov) {
             return false;
         }
+
+        @Override
+        public int applyMove(String username, Match match, JsonObject move) { return 0; }
     };
     public abstract Match startMatch(String... players);
-    public abstract boolean validateInput(String player, JsonObject json);
+    public abstract boolean validateInput(String player, Match match, JsonObject move);
+    public abstract int applyMove(String username, Match match, JsonObject move);
 }
