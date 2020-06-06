@@ -130,6 +130,7 @@
                 <option value="CHESS">Chess</option>
             </select>
             <button type="button" class="btn btn-secondary" id="add-player">Add player</button>
+            <button type="button" class="btn btn-secondary" id="add-bot">Add bot</button>
         </h2>
         <div id="players" class="row">
         </div>
@@ -146,13 +147,14 @@
     let gmussi = new TicTacToePlayer({"name": "gmussi"});
     players.addPlayer(gmussi, new TicTacToeView({model: gmussi}));
 
-    $("#add-player").click(() => {
+    function addPlayerClick(automated) {
         let gameType = $("#gameType").val();
 
         switch (gameType) {
             case "TICTACTOE":
                 let player = new TicTacToePlayer({
-                    "name": names[Math.floor(Math.random() * names.length)] + (Math.floor(Math.random() * 1000))
+                    "name": names[Math.floor(Math.random() * names.length)] + (Math.floor(Math.random() * 1000)),
+                    "automated": automated
                 });
                 let view = new TicTacToeView({
                     model: player
@@ -162,8 +164,14 @@
             default:
                 window.alert("not implemented yet");
         }
+    }
+    $("#add-player").click(() => {
+        addPlayerClick(false);
+    });
+    $("#add-bot").click(() => {
+        addPlayerClick(true);
     });
 
-    $("#add-player").click();
+    $("#add-bot").click();
 </script>
 </html>

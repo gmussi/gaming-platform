@@ -68,6 +68,11 @@ const Player = Backbone.Model.extend({
     },
     disconnect() {
         this.get("ws").close();
+
+        let that = this;
+        if (this.get("automated")) {
+            setTimeout(() => that.getTicket(), 500);
+        }
     },
     getTicket() {
         let that = this;
@@ -91,6 +96,9 @@ const Player = Backbone.Model.extend({
         this.set("ws", ws);
     },
     onConnected(event) {
+        this.findMatch();
+    },
+    findMatch() {
         this.set("status", MATCHMAKING);
         this.get("ws").send(JSON.stringify({
             "action": "FIND_MATCH",
@@ -128,7 +136,7 @@ const Player = Backbone.Model.extend({
         // to be overridden
     },
     onMatchEnd() {
-
+        this.findMatch();
     },
     onPlayEvent(event) {
         // to be overridden
@@ -151,6 +159,9 @@ const TicTacToePlayer = Player.extend({
             "started": event.match.startingPlayer == this.get("name"),
             "matchId": event.match.matchId
         });
+        if (this.get("isMyTurn") && this.get("automated")) {
+            this.autoPlay();
+        }
     },
     endMatch(event) {
         let endType = event.match.endType;
@@ -163,7 +174,7 @@ const TicTacToePlayer = Player.extend({
         });
 
         let that = this;
-        setTimeout(() => that.onMatchEnd(), 1000);
+        setTimeout(() => that.onMatchEnd(), 500);
     },
     play(pos) {
         this.get("ws").send(JSON.stringify({
@@ -180,6 +191,25 @@ const TicTacToePlayer = Player.extend({
             "pos": event.pos,
             "isMyTurn": event.currentTurnPlayer == this.get("name")
         });
+
+        if (this.get("automated")) {
+            this.autoPlay();
+        }
+    },
+    autoPlay() {
+        let that = this;
+        setTimeout(() => {
+            if (this.get("isMyTurn") && this.get("status") == PLAYING) {
+                let pos = this.get("pos");
+                let playablePos = [];
+                for (let i = 0; i < 9; i++) {
+                    if (pos[i] == 0) {
+                        playablePos.push(i);
+                    }
+                }
+                that.play(playablePos[Math.floor(Math.random() * playablePos.length)]);
+            }
+        }, 500);
     }
 });
 

@@ -20,7 +20,7 @@ public class AuthResourceTest extends ContainerMongoTest {
     public void testUsernameExists() {
         // no player created yet, this must return false and success
         given()
-            .when().get("auth/available/" + username)
+            .when().get("auth/available/" + UUID.randomUUID().toString())
             .then()
                 .statusCode(200)
                 .body(is("false"));
