@@ -26,7 +26,7 @@
     <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
     <quarkus.platform.version>1.5.0.Final</quarkus.platform.version>
-    <revision>1.0</revision>
+    <revision>1.1</revision>
     <surefire-plugin.version>2.22.1</surefire-plugin.version>
     <quarkus.container-image.group>gmussi</quarkus.container-image.group>
     <quarkus.container-image.username>gmussi</quarkus.container-image.username>

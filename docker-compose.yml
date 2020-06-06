@@ -1,0 +1,80 @@
+version: '3.2'
+
+services:
+  zookeeper:
+    image: zookeeper:latest
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9094:9094"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://kafka:9094
+      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+
+  mongodb-express:
+    image: mongo-express:latest
+    depends_on:
+      - mongodb
+    ports:
+      - "8089:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+
+  admin:
+    image: gmussi/gaming-platform-admin:${GAMING_VERSION}
+    depends_on:
+      - mongodb
+      - kafka
+    ports:
+      - "8080:8080"
+    environment:
+      quarkus.mongodb.connection-string: mongodb://mongodb:27017
+
+  gameplay:
+    image: gmussi/gaming-platform-gameplay:${GAMING_VERSION}
+    depends_on:
+      - mongodb
+      - kafka
+    ports:
+      - "8082:8082"
+    environment:
+      quarkus.mongodb.connection-string: mongodb://mongodb:27017
+      kafka.bootstrap.servers: kafka:9094
+
+  matchmaking:
+    image: gmussi/gaming-platform-matches:${GAMING_VERSION}
+    depends_on:
+      - mongodb
+      - kafka
+    ports:
+      - "8084:8084"
+    environment:
+      quarkus.mongodb.connection-string: mongodb://mongodb:27017
+      kafka.bootstrap.servers: kafka:9094
+
+  webadmin:
+    image: gmussi/gaming-platform-webadmin:${GAMING_VERSION}
+    depends_on:
+      - admin
+      - matchmaking
+      - gameplay
+    ports:
+      - "8085:8085"
+    environment:
+      gaming.platform.url.admin: http://localhost:8080
+

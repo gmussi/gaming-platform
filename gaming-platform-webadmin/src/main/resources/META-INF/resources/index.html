@@ -6,6 +6,8 @@
     <title>Gaming Platform</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <script src="/config.js"></script>
+
     <!-- Bootstrap CSS -->
     <link
             rel="stylesheet"
@@ -137,11 +139,6 @@
     </div>
 </body>
 <script>
-    const SERVER = {
-        "ADMIN": "http://localhost:8080",
-        "STATISTICS": "http://localhost:8081",
-        "GAMEPLAY": "ws://localhost:8082"
-    };
     const names = ["Guilherme-", "Marcelo-", "Fernando-", "Matheus-", "Luciano-", "Eduardo-", "Svitlana-", "Daniel-", "Marco-", "Pedro-", "Paulo-"]
 
     let gmussi = new TicTacToePlayer({"name": "gmussi"});
