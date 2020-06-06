@@ -140,6 +140,12 @@ const Player = Backbone.Model.extend({
     },
     onPlayEvent(event) {
         // to be overridden
+    },
+    onRemove() {
+        let ws = this.get("ws");
+        if (ws != null) {
+            ws.close();
+        }
     }
 });
 
@@ -219,6 +225,11 @@ class Players extends Backbone.Collection {
         $("#players").append(view.$el);
         view.render();
         player.automate();
+    }
+    removePlayer(player, view) {
+        player.onRemove();
+        this.remove(player);
+        view.$el.remove();
     }
 };
 

@@ -8,7 +8,8 @@ const PlayerView = Backbone.View.extend({
     events: {
         'click .connect': 'connect',
         'click .disconnect': 'disconnect',
-        'click .pos': 'posClick'
+        'click .pos': 'posClick',
+        'click .remove': 'remove'
     },
     render: function() {
         let name = this.model.get("name");
@@ -18,10 +19,14 @@ const PlayerView = Backbone.View.extend({
         let pos = this.model.get("pos").map(num => num == 0 ? "_" : num == me ? 'X' : 'O');
         let isMyTurn = this.model.get("isMyTurn");
 
-        let button = this.model.get("ws") != null ?
-            `<button type="button" class="btn btn-secondary disconnect">Disconnect</button>`
-            :
-            `<button type="button" class="btn btn-secondary connect">Connect</button>`;
+        let button = "";
+        if (this.model.get("automated")) {
+            button = `<button type="button" class="btn btn-secondary remove">Remove</button>`;
+        } else if (this.model.get("ws") != null) {
+            button = `<button type="button" class="btn btn-secondary disconnect">Disconnect</button>`;
+        } else {
+            button = `<button type="button" class="btn btn-secondary connect">Connect</button>`;
+        }
         this.$el.html(`
             <div class="card h-100">
                 <div class="card-body" id="${name}-bg">
@@ -53,6 +58,9 @@ const PlayerView = Backbone.View.extend({
     },
     connect() {
         this.model.getTicket();
+    },
+    remove() {
+        players.removePlayer(this.model, this);
     },
     flash() {
         let name = this.model.get("name");
