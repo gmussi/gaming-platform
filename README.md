@@ -71,7 +71,7 @@ curl --location --request POST 'http://{ADMIN_URL}/auth/login' \
 
 **Output** (TEXT/PLAIN)
 
-`jwt token` Stirng containing the authorization token to use in requests
+`jwt token` String containing the authorization token to use in requests
 
 ### Getting a ticket
 Tickets are single-use tokens used to connect via websocket (since websockets do not accept headers).
