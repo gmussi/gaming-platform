@@ -1,3 +1,10 @@
+# Testing locally
+
+```shell script
+wget https://raw.githubusercontent.com/gmussi/gaming-platform/master/docker-compose.yml
+docker-compose up
+```
+
 # Backend services
 
 The backend services consists of many services that communicate with each other using Apache Kafka as broker, with multiple topics.
@@ -37,7 +44,9 @@ The admin service provides tools to create account, login and obtain tickets and
 
 **Input**
 
-`curl --location --request GET 'http://{ADMIN_URL}/auth/available/{username}'`
+```shell script
+curl --location --request GET 'http://{ADMIN_URL}/auth/available/{username}'
+```
 
 **Output** (TEXT/PLAIN)
  
@@ -47,7 +56,7 @@ The admin service provides tools to create account, login and obtain tickets and
 
 **Input**
 
-```bash
+```shell script
 curl --location --request POST 'http://{ADMIN_URL}/auth/register' \
  --header 'Content-Type: application/x-www-form-urlencoded' \
  --data-urlencode 'username={username}' \
@@ -62,7 +71,7 @@ curl --location --request POST 'http://{ADMIN_URL}/auth/register' \
 
 **Input**
 
-```bash
+```shell script
 curl --location --request POST 'http://{ADMIN_URL}/auth/login' \
 --header 'Content-Type: application/x-www-form-urlencoded' \
 --data-urlencode 'username={username}' \
@@ -77,7 +86,7 @@ curl --location --request POST 'http://{ADMIN_URL}/auth/login' \
 Tickets are single-use tokens used to connect via websocket (since websockets do not accept headers).
 
 **Input**
-```bash
+```shell script
 curl --location --request GET 'http://{ADMIN_URL}/ticket/' \
 --header 'Authorization: Bearer {jwt token}'
 ```
@@ -116,7 +125,7 @@ The following inputs are currently supported:
 {
   "action": "PLAY",
   "matchId": "{matchId}",
-  "move": object // depends on game type, check further down
+  "move": "<object> // depends on game type, check further down"
 }
 ```
 
@@ -126,7 +135,7 @@ All events sent by the server follows the same format:
 ```json
 {
   "eventType": "<string>",
-  "match": matchObject // game state, see below
+  "match": "<object> // game state, see Match Object below"
 }
 ```
 
@@ -139,10 +148,10 @@ All events sent by the server follows the same format:
 ```json
 {
   "matchId": "<string>",
-  "players": "<string array>", // usernames
-  "winner": "<string>", // username
-  "endType": "<string: DRAW|DISCONNECTION|WINNER>",
-  "gameType": "<string: TICTACTOE|MATCH_FOUR|CHESS,CHECKERS>"
+  "players": "<string array> // usernames",
+  "winner": "<string> // username", 
+  "endType": "<string> DRAW|DISCONNECTION|WINNER",
+  "gameType": "<string> TICTACTOE|MATCH_FOUR|CHESS,CHECKERS"
 }
 ```
 
@@ -196,7 +205,7 @@ The following properties represent a tictactoe game and are sent together with e
 
 ```json
 {
-  "pos": position
+  "pos": "<number> // position on the board (0 - 8)"
 }
 ```
 
