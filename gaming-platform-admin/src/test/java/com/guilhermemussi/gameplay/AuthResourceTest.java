@@ -23,7 +23,7 @@ public class AuthResourceTest extends ContainerMongoTest {
             .when().get("auth/available/" + UUID.randomUUID().toString())
             .then()
                 .statusCode(200)
-                .body(is("false"));
+                .body(is("true"));
 
     }
 

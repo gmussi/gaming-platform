@@ -29,11 +29,11 @@ const Player = Backbone.Model.extend({
         let name = this.get("name");
         let that = this;
         jQuery.get(`${SERVER.ADMIN}/auth/available/${name}`)
-            .done((exists) => {
-                if (exists == "true") {
-                    that.login();
-                } else {
+            .done((available) => {
+                if (available == "true") {
                     that.register();
+                } else {
+                    that.login();
                 }
             })
             .fail((event) => {
