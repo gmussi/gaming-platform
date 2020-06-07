@@ -5,6 +5,8 @@ wget https://raw.githubusercontent.com/gmussi/gaming-platform/master/docker-comp
 docker-compose up
 ```
 
+Access <http://localhost:8085/>
+
 # Backend services
 
 The backend services consists of many services that communicate with each other using Apache Kafka as broker, with multiple topics.
