@@ -26,8 +26,8 @@
     <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
     <quarkus.platform.version>1.5.0.Final</quarkus.platform.version>
-    <revision>1.2</revision>
-    <surefire-plugin.version>2.22.1</surefire-plugin.version>
+    <revision>1.3</revision>
+    <surefire-plugin.version>3.0.0-M4</surefire-plugin.version>
     <quarkus.container-image.group>gmussi</quarkus.container-image.group>
     <quarkus.container-image.username>gmussi</quarkus.container-image.username>
     <quarkus.container-image.build>true</quarkus.container-image.build>
@@ -109,7 +109,7 @@
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-failsafe-plugin</artifactId>
+            <artifactId>maven-surefire-plugin</artifactId>
             <version>${surefire-plugin.version}</version>
             <executions>
               <execution>

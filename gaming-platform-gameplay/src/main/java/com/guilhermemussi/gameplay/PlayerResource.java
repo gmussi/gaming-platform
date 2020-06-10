@@ -43,6 +43,10 @@ public class PlayerResource {
     Emitter<JsonObject> findMatch;
 
     @Inject
+    @Channel("cancel-match-out")
+    Emitter<JsonObject> cancelMatch;
+
+    @Inject
     @Channel("player-move-out")
     Emitter<JsonObject> playerMove;
 
@@ -114,6 +118,12 @@ public class PlayerResource {
                         .add("username", username)
                         .add("matchId", json.getString("matchId"))
                         .add("move", json.get("move"))
+                        .build());
+                break;
+            case "CANCEL_MATCH":
+                cancelMatch.send(Json.createObjectBuilder()
+                        .add("username", username)
+                        .add("matchId", json.getString("matchId"))
                         .build());
                 break;
             default:

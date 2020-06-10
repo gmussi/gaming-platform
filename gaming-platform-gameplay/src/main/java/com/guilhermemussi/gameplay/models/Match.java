@@ -18,12 +18,14 @@ public class Match extends PanacheMongoEntityBase {
 
     public String winner;
 
+    public String quitter;
+
     public EndType endType;
 
     public GameType gameType;
 
     public static enum EndType {
-        VICTORY, DRAW, DISCONNECTION
+        VICTORY, DRAW, DISCONNECTION, CANCELED
     }
 
     public static Match start(GameType gameType, String... players) {

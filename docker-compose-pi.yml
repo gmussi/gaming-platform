@@ -24,6 +24,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9094
       KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      BROKER_ID_COMMAND: "docker info | grep Name | cut -d' ' -f 2 | cut -c14 | cat <(echo -n 10) -"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 

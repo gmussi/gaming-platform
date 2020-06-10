@@ -9,7 +9,8 @@ const PlayerView = Backbone.View.extend({
         'click .connect': 'connect',
         'click .disconnect': 'disconnect',
         'click .pos': 'posClick',
-        'click .remove': 'remove'
+        'click .remove': 'remove',
+        'click .cancelMatch': 'cancelMatch'
     },
     render: function() {
         let name = this.model.get("name");
@@ -19,18 +20,23 @@ const PlayerView = Backbone.View.extend({
         let pos = this.model.get("pos").map(num => num == 0 ? "_" : num == me ? 'X' : 'O');
         let isMyTurn = this.model.get("isMyTurn");
 
-        let button = "";
-        if (this.model.get("automated")) {
-            button = `<button type="button" class="btn btn-secondary remove">Remove</button>`;
-        } else if (this.model.get("ws") != null) {
-            button = `<button type="button" class="btn btn-secondary disconnect">Disconnect</button>`;
-        } else {
-            button = `<button type="button" class="btn btn-secondary connect">Connect</button>`;
+        let buttons = [];
+        if (!this.model.get("automated")) {
+            if (this.model.get("status") == PLAYING) {
+                buttons.push(`<button type="button" class="btn btn-secondary cancelMatch">Cancel Match</button>`);
+            } else if (this.model.get("ws") != null) {
+                buttons.push(`<button type="button" class="btn btn-secondary disconnect">Disconnect</button>`);
+            } else {
+                buttons.push(`<button type="button" class="btn btn-secondary connect">Connect</button>`);
+            }
+
         }
+        buttons.push(`<button type="button" class="btn btn-secondary remove">Remove</button>`);
+
         this.$el.html(`
             <div class="card h-100">
                 <div class="card-body" id="${name}-bg">
-                    <h5 class="card-title">${name} ${button}</h5>
+                    <h5 class="card-title">${name} ${buttons.join(" ")}</h5>
                     <p class="card-text">Status: ${status}</p>
                     <p class="card-text">Opponent: ${opponent != null ? opponent : ""}</p>
                     <div class="container" style="background-color: ${status == PLAYING && isMyTurn ? '#ffffff' : '#bcbcbc'}">
@@ -78,6 +84,9 @@ const PlayerView = Backbone.View.extend({
                 $(`#${name}-bg`).addClass("flash-yellow");
             }, 1);
         }
+    },
+    cancelMatch() {
+        this.model.cancelMatch();
     },
     posClick(event) {
         // get the array

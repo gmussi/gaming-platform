@@ -146,6 +146,13 @@ const Player = Backbone.Model.extend({
         if (ws != null) {
             ws.close();
         }
+    },
+    cancelMatch() {
+        let ws = this.get("ws");
+        ws.send(JSON.stringify({
+            "action": "CANCEL_MATCH",
+            "matchId": this.get("matchId")
+        }));
     }
 });
 

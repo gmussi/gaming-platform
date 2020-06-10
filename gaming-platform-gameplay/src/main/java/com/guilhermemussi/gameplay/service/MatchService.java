@@ -70,8 +70,10 @@ public class MatchService {
 
             // end match with disconnection status
             match.endType = Match.EndType.DISCONNECTION;
+            match.quitter = username;
             match.update();
 
+            // TODO send "cancel-match-out" events instead (see below also)
             // notify players match is over
             match.players.forEach((user) -> playerEvents.send(
                     Json.createReader(new StringReader(jsonBuilder.toJson(
@@ -79,6 +81,34 @@ public class MatchService {
                             .readObject())
             );
         });
+    }
+
+    @Incoming("cancel-match-in")
+    @Merge(Merge.Mode.MERGE)
+    public void cancelMatch(JsonObject json) {
+        String username = Objects.requireNonNull(json.getString("username"));
+        String matchId = Objects.requireNonNull(json.getString("matchId"));
+
+        LOGGER.info("Player " + username + " is requesting to cancel match " + matchId);
+        Match match = Match.findById(matchId);
+
+        if (match.players.contains(username)) {
+            LOGGER.info("Canceling match " + matchId);
+
+            // end match with disconnection status
+            match.endType = Match.EndType.CANCELED;
+            match.quitter = username;
+            match.update();
+
+            // TODO send "cancel-match-out" events instead (see above also)
+            match.players.forEach((user) -> playerEvents.send(
+                    Json.createReader(new StringReader(jsonBuilder.toJson(
+                            new MatchEvent(match, user, PlayerEvents.END_MATCH))))
+                            .readObject())
+            );
+        } else {
+            LOGGER.info("Player is not playing in this match. Request being ignored.");
+        }
     }
 
 }
