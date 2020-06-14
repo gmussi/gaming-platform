@@ -1,4 +1,4 @@
-package com.guilhermemussi.gameplay.models;
+package com.guilhermemussi.statistics.models;
 
 import io.quarkus.mongodb.panache.MongoEntity;
 import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
@@ -11,6 +11,7 @@ public class Player extends PanacheMongoEntityBase {
 
     public Boolean connected;
     public Boolean searching;
+    public GameType gameType;
 
     public Integer defeats;
     public Integer victories;
@@ -19,16 +20,7 @@ public class Player extends PanacheMongoEntityBase {
 
     }
 
-    public synchronized static Player use(final String username) {
-        return Player.<Player>findByIdOptional(username).orElseGet(() -> {
-            Player player = new Player();
-            player.username = username;
-            player.defeats = 0;
-            player.victories = 0;
-            player.persist();
-            return player;
-        });
+    public String getUsername() {
+        return username;
     }
-
-
 }

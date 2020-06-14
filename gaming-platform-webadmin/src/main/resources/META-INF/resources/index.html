@@ -103,27 +103,29 @@
         <h1>Gaming Platform</h1>
         <p>This frontend allows interaction with the gaming platform backend.</p>
 
-        <!--
+
         <h2>Stats</h2>
         <div class="row">
-            <div class="col-xl-3 col-md-3">
-                <div class="card bg-primary text-white mb-4 shadow">
-                    <div id="debug-connected" class="card-body">12</div>
+            <div class="col-md-2">
+                <div class="card bg-primary text-white mb-3 shadow">
+                    <div id="player-count" class="card-body"></div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
                         Players
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-3">
-                <div class="card bg-primary text-white mb-4 shadow">
+            <!--
+            <div class="col-md-2">
+                <div class="card bg-primary text-white mb-3 shadow">
                     <div class="card-body">12</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
                         Matches
                     </div>
                 </div>
             </div>
+            -->
         </div>
-        -->
+
         <h2>Players
             <select id="gameType">
                 <option value="TICTACTOE">Tic Tac Toe</option>
@@ -138,6 +140,8 @@
         </div>
     </div>
 </body>
+<script src="/events.js"></script>
+
 <script>
     const names = ["Guilherme-", "Marcelo-", "Fernando-", "Matheus-", "Luciano-", "Eduardo-", "Svitlana-", "Daniel-", "Marco-", "Pedro-", "Paulo-"]
 
@@ -171,4 +175,5 @@
 
     $("#add-bot").click();
 </script>
+
 </html>

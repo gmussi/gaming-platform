@@ -78,4 +78,12 @@ public class AuthResource {
 
         return login(username, password);
     }
+
+    @DELETE
+    @RolesAllowed(TokenUtils.ROLE_PLAYER)
+    public void deletePlayer(@Context SecurityContext ctx) {
+        String username = ctx.getUserPrincipal().getName();
+
+        PlayerCredential.deleteById(username);
+    }
  }
